@@ -3,29 +3,57 @@ import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { toDoState } from "./atoms";
 import Board from "./Components/Board";
+import CreateBoardForm from "./Components/CreateBoardForm";
+import HeaderBtn from "./Components/HeaderBtn";
 
 const Wrapper = styled.div`
   display: flex;
-  width: 100vw;
-  height: 100vh;
-  margin: 0 auto;
+  flex-direction: column;
+  max-width: 2000px;
+  min-height: 650px;
+`;
+
+const BoardsWrap = styled.div`
+  display: flex;
+  width: 98%;
+  height: 100%;
+  margin: 0 2%;
   justify-content: center;
   align-items: center;
 `;
+
 const Boards = styled.div`
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
   width: 100%;
-  gap: 10px;
+  gap: 15px;
 `;
 
-
+const Time = styled.div`
+  height: 100%;
+  font-weight: 400;
+  font-size: 14px;
+  margin-right: 5px;
+`;
+const Header = styled.header<IHeader>`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: ${props => props.bgColor};
+  box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
+  margin-bottom: 20px;
+`
+interface IHeader {
+  bgColor: string;
+}
 
 
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
-  const onDragEnd = ({ draggableId,destination, source}:DropResult) => {
+  const onDragEnd = (info:DropResult) => {
+    const {destination, source} = info;
     if(!destination) return;
     if(destination.droppableId === source.droppableId){
       //같은 보드판에서의 움직임
@@ -57,16 +85,24 @@ function App() {
   }
 }
   return(
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Wrapper>
-        {/* 모든 보드판을 묶고 있는 영역 */}
-        <Boards>
-          {Object.keys(toDos).map((boardId) => (
-            <Board boardId={boardId} key={boardId} toDos={toDos[boardId]}/>
-          ))}
-        </Boards>
-      </Wrapper>
-    </DragDropContext>
+    <Wrapper>
+      <Header bgColor={'#dfe4ea'}>
+        <HeaderBtn />
+        <CreateBoardForm />
+        <Time>PM 12 : 23</Time>
+      </Header>
+      <DragDropContext onDragEnd={onDragEnd}>
+        {/* board create form components */}
+        <BoardsWrap>
+          {/* 모든 보드판을 묶고 있는 영역 */}
+          <Boards>
+            {Object.keys(toDos).map((boardId) => (
+              <Board boardId={boardId} key={boardId} toDos={toDos[boardId]}/>
+            ))}
+          </Boards>
+        </BoardsWrap>
+      </DragDropContext>
+    </Wrapper>
   );
 }
 

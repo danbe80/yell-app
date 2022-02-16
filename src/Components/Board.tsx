@@ -14,6 +14,8 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,.2);
+  margin-bottom: 5px;
 `;
 const Title = styled.h2`
   text-align: center;

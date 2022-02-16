@@ -9,6 +9,7 @@ const Card = styled.div<{ isDragging: boolean }>`
     :props.theme.cardColor};
   border-radius: 5px;
   margin-bottom: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,.2);
 `;
 
 interface IDragabbleCardProps {
