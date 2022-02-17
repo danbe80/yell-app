@@ -42,7 +42,7 @@ interface IFormName {
 
 
 function CreateBoardForm({toForm}:IFormProps){
-  const {register, setValue, handleSubmit} = useForm<IBoardFrom>();
+  /* const {register, setValue, handleSubmit} = useForm<IBoardFrom>();
   const [isCreateFormBtn, setIsCreateFormBtn] = useState(false);
   const onClick = (event:React.FormEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -51,9 +51,9 @@ function CreateBoardForm({toForm}:IFormProps){
   const onValid = ({FormName}:IFormName) => {
     console.log(FormName);
     setValue("postit", "");
-  }
+  } */
   return(
-    <BoardForm onSubmit={handleSubmit(onValid)}>
+   /*  <BoardForm onSubmit={handleSubmit(onValid)}>
       {isCreateFormBtn ? 
         <input 
         {...register("postit", {required: true})}
@@ -61,7 +61,8 @@ function CreateBoardForm({toForm}:IFormProps){
         placeholder="폼이름을 입력해주세요."
       /> 
       : <FormBtn onClick={onClick}>FORM</FormBtn>}
-    </BoardForm>
+    </BoardForm> */
+    null
   );
 }
 

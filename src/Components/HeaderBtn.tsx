@@ -16,6 +16,9 @@ const DelBtn = styled.button`
   height: 15px;
   border-radius: 50%;
   border: none;
+  &:hover {
+    box-shadow: 2px 1px 5px rgba(0,0,0,.5) inset;
+  }
 `
 const ChangeTheme = styled.button`
   background-color: green;
@@ -23,13 +26,22 @@ const ChangeTheme = styled.button`
   height: 15px;
   border-radius: 50%;
   border: none;
+  &:hover {
+    box-shadow: 2px 1px 5px rgba(0,0,0,.5) inset;
+  }
 `;
 
 function HeaderBtn(){
+  const onDelete = () => {
+    // 폼 삭제할 수 있는 부분
+  }
+  const onChangeColor = () => {
+    // theme color 변경
+  }
   return (
     <BtnWrap>
-      <DelBtn></DelBtn>
-      <ChangeTheme></ChangeTheme>
+      <DelBtn onClick={onDelete}/>
+      <ChangeTheme onClick={onChangeColor}/>
     </BtnWrap>
   );
 }
