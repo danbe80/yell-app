@@ -1,4 +1,4 @@
-import { atom, selector } from "recoil";
+import { atom } from "recoil";
 
 export interface IToDo {
   id: number;
@@ -12,21 +12,6 @@ interface IToDoState {
 export const toDoState = atom<IToDoState>({
   key: "toDo",
   default: {
-      
+      "ToDo": [], 
     }
   });
-
-export const toFormState = atom<IFormState>({
-  key: "postit",
-  default: {
-    "form": []
-  },
-})
-interface IFormState {
-  [key: string]: IForm[];
-}
-
-export interface IForm {
-  id: number;
-  name: string;
-}

@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import {IForm} from "../atoms";
+import { toDoState } from "../atoms";
 
-const BoardForm = styled.form`
-  display: flex;
+const CreateFrom = styled.form`
+ display: flex;
   height: 100%;
   justify-content: center;
   input {
     background-color: transparent;
     border: none;
-    &:active {
-      border: none;
-    }
+    padding: 2px;
   }
 `;
+
 
 const FormBtn = styled.button`
   display: block;
@@ -29,41 +29,32 @@ const FormBtn = styled.button`
   }
 `;
 
-interface IBoardFrom {
-  postit: string;
+interface IForm{
+  toForm: string;
 }
 
-interface IFormProps {
-  toForm : IForm[];
-}
-interface IFormName {
-  FormName: string;
-}
-
-
-function CreateBoardForm({toForm}:IFormProps){
-  /* const {register, setValue, handleSubmit} = useForm<IBoardFrom>();
-  const [isCreateFormBtn, setIsCreateFormBtn] = useState(false);
-  const onClick = (event:React.FormEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    setIsCreateFormBtn((current) => !current);
+function CreateBoardForm(){
+  const [toDos, setToDos] = useRecoilState(toDoState);
+  const {register, setValue, handleSubmit} = useForm<IForm>({defaultValues: {toForm: ""}});
+  const onValid = ({toForm}:IForm) => {
+    if(toForm !== ''){
+      if(
+        Object.keys(toDos).some(
+          (v) => v.toLowerCase() === toForm.toLowerCase(),
+        )
+      )
+      return;
+      setToDos({...toDos, [toForm]: []});
+      setValue('toForm', '');
+    }
   }
-  const onValid = ({FormName}:IFormName) => {
-    console.log(FormName);
-    setValue("postit", "");
-  } */
-  return(
-   /*  <BoardForm onSubmit={handleSubmit(onValid)}>
-      {isCreateFormBtn ? 
-        <input 
-        {...register("postit", {required: true})}
+  return (
+    <CreateFrom onSubmit={handleSubmit(onValid)}>
+      <input {...register("toForm", {required: true})}
         type="text"
-        placeholder="폼이름을 입력해주세요."
-      /> 
-      : <FormBtn onClick={onClick}>FORM</FormBtn>}
-    </BoardForm> */
-    null
-  );
+        placeholder="보드의 이름을 적어주세요."/>
+    </CreateFrom>
+  )
 }
 
 export default CreateBoardForm;
