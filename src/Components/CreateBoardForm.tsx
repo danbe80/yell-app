@@ -4,6 +4,8 @@ import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { toDoState } from "../atoms";
 
+const FormWrap = styled.div``;
+
 const CreateFrom = styled.form`
  display: flex;
   height: 100%;
@@ -34,8 +36,9 @@ interface IForm{
 }
 
 function CreateBoardForm(){
+  const [createFormBtn, setCreateFormBtn] = useState(false);
   const [toDos, setToDos] = useRecoilState(toDoState);
-  const {register, setValue, handleSubmit} = useForm<IForm>({defaultValues: {toForm: ""}});
+  const {register, setValue, handleSubmit, setFocus} = useForm<IForm>({defaultValues: {toForm: ""}});
   const onValid = ({toForm}:IForm) => {
     if(toForm !== ''){
       if(
@@ -46,14 +49,28 @@ function CreateBoardForm(){
       return;
       setToDos({...toDos, [toForm]: []});
       setValue('toForm', '');
+      setCreateFormBtn(false);
     }
   }
-  return (
-    <CreateFrom onSubmit={handleSubmit(onValid)}>
+  const onClick = () => {
+    setFocus('toForm');
+    if(!createFormBtn){
+      setCreateFormBtn(true);
+    }
+    else{
+      setCreateFormBtn(false);
+    }
+  }
+  return (    
+    <FormWrap>
+      {createFormBtn ? 
+      <CreateFrom onSubmit={handleSubmit(onValid)}>
       <input {...register("toForm", {required: true})}
         type="text"
         placeholder="보드의 이름을 적어주세요."/>
-    </CreateFrom>
+        </CreateFrom>:
+        <FormBtn onClick={onClick}>보드판 만들기</FormBtn>}
+    </FormWrap>
   )
 }
 
