@@ -4,6 +4,19 @@ import styled from "styled-components";
 import { toDoState } from "../atoms";
 import Board from "./Board";
 
+const Wrapper = styled.div`
+  width: 300px;
+  border-radius: 5px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,.2);
+  margin-bottom: 5px;
+  box-sizing: border-box;
+  background-color: ${(props) => props.theme.boardsColor};
+`;
+
 const Boards = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -15,9 +28,17 @@ const Boards = styled.div`
   box-sizing: border-box;
 `;
 
+const Title = styled.h2`
+  height: 25px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+`;
+
 function DragDrop(){
   const [toDos, setToDos] = useRecoilState(toDoState);
-  console.log(Object.keys(toDos).map((boardId,index, toForm)=> console.log(boardId , toForm, index)));
+  console.log(Object.keys(toDos).map((boardId,index, toForm)=> console.log(boardId , index, toForm[index])));
 
   const onDragEnd = () => {}
  /*  
@@ -56,16 +77,20 @@ function DragDrop(){
 // }
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-       <Droppable droppableId="form">
+       <Droppable droppableId="form" direction="horizontal">
          {(p)=>(
            <Boards ref={p.innerRef}>
-             {Object.keys(toDos).map((boardId, index) => (
+             {Object.keys(toDos).map((boardId, index, toForm) => (
                <Draggable draggableId={boardId} index={index}>
                  {(p) => (
-                    <div ref={p.innerRef} {...p.draggableProps} {...p.dragHandleProps}>{boardId}</div>
+                    <Wrapper ref={p.innerRef} {...p.draggableProps}>
+                      <Title {...p.dragHandleProps}>{boardId}</Title>
+                      <Board boardId={boardId} key={index} toForm={toForm[index]} />
+                    </Wrapper>
                  )}
                </Draggable>
              ))}
+             {p.placeholder}
            </Boards>
          )}
 

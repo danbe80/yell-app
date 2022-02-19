@@ -18,7 +18,6 @@ const BoardsWrap = styled.div`
 `;
 
 
-
 const Header = styled.header<IHeader>`
   display: flex;
   width: 100%;

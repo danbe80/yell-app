@@ -1,35 +1,21 @@
-import { Droppable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { IToDo, toDoState } from "../atoms";
 import DragabbleCard from "./DragabbleCard";
 
 const Wrapper = styled.div`
-  width: 300px;
-  padding-top: 10px;
-  background-color: ${(props) => props.theme.boardsColor};
-  border-radius: 5px;
-  min-height: 300px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0,0,0,.2);
-  margin-bottom: 5px;
-  border: 1px solid red;
-  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
 `;
-const Title = styled.h2`
-  text-align: center;
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 10px;
-`;
+
 interface IAreaProps {
   isDraggingFromThis: boolean;
   isDraggingOver: boolean;
 }
 const Area = styled.div<IAreaProps>`
+  min-height: 220px;
   background-color: ${(props) => 
     //벗아나 도착한 영역
     props.isDraggingOver ? props.theme.overColor 
@@ -59,8 +45,9 @@ interface IForm{
 }
 
 function Board({toForm, boardId, index}:IBoardProps){
+  const [toDos, setToDos] = useRecoilState(toDoState);
   console.log(toForm);
-  const setToDos = useSetRecoilState(toDoState)
+  console.log(toDos);
   const {register, setValue, handleSubmit} = useForm<IForm>();
   const onValid = ({toDo}:IForm) => {
     const newToDo = {
@@ -80,49 +67,34 @@ function Board({toForm, boardId, index}:IBoardProps){
   }
   return (
     <Wrapper>
-      <Title>{boardId}</Title>
-        <Form onSubmit={handleSubmit(onValid)}>
-          <input 
-            {...register("toDo", {required: true})}
-            type="text"
-            placeholder={`Add task on ${boardId}`}
-          />
-        </Form>
-      <Droppable droppableId={boardId}>
-        {() => (<div></div>)}
-        {/* ex 보드판 영역 component*/}
-       {/*  {(provided, info) => (
-          <Area 
-            isDraggingOver={info.isDraggingOver} 
-            isDraggingFromThis={Boolean(info.draggingFromThisWith)} 
-            ref={provided.innerRef} {...provided.droppableProps}>
-            {toForm.map((toDo, index) => (
-              <DragabbleCard 
-              key={toDo.id} 
-              toDoId={toDo.id} 
-              toDoText={toDo.text} 
-              index={index}/>
-              
-            ))}
-            {provided.placeholder}
-          </Area>
-        )} */}
-      </Droppable>
+      <Form onSubmit={handleSubmit(onValid)}>
+        <input 
+          {...register("toDo", {required: true})}
+          type="text"
+          placeholder={`Add task on ${boardId}`}
+        />
+      </Form>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId={boardId} direction="vertical">
+          {/* ex 보드판 영역 component*/}
+            {(provided, snapshot) => (
+            <Area 
+              isDraggingOver={snapshot.isDraggingOver} 
+              isDraggingFromThis={Boolean(snapshot.draggingFromThisWith)} 
+              ref={provided.innerRef} {...provided.droppableProps}>
+              {toDos[toForm].map((toDo, index) => (
+                <DragabbleCard 
+                key={toDo.id} 
+                toDoId={toDo.id} 
+                toDoText={toDo.text} 
+                index={index}/>
+              ))}
+              {provided.placeholder}
+            </Area>
+          )}
+        </Droppable>
+      </DragDropContext>
     </Wrapper>
   );
 }
 export default Board;
-
-
-
-/* 
-              <Draggable draggableId={toDoId + ""} index={index}>
-                {(provided, snapshot) => (
-                <Card ref={provided.innerRef} 
-                isDragging={snapshot.isDragging}
-                {...provided.draggableProps} 
-                {...provided.dragHandleProps}>
-                  {toDoText}
-                </Card>
-                )}
-             </Draggable> */
