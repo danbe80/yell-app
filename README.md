@@ -6,7 +6,7 @@
 
 ## 사용한 스킬(Using Skills)
 
-- react / typescript
+- react / typescript / beautiful-dnd / react-hook-form / atom
 
 ## [reset CSS](https://www.npmjs.com/package/styled-reset)
 
@@ -25,7 +25,7 @@ return (
 
 or
 
-```ts
+```ts // 수정할 초기화가 있어서 createGlobalStyle로 선택
 const GlobalStyle = createGlobalStyle`
     ${Reset}
   `;

@@ -32,44 +32,46 @@ const FormBtn = styled.button`
 `;
 
 interface IForm{
-  toForm: string;
+  fName : string;
 }
 
 function CreateBoardForm(){
   const [createFormBtn, setCreateFormBtn] = useState(false);
   const [toDos, setToDos] = useRecoilState(toDoState);
-  const {register, setValue, handleSubmit, setFocus} = useForm<IForm>({defaultValues: {toForm: ""}});
-  const onValid = ({toForm}:IForm) => {
-    if(toForm !== ''){
+  const {register, setValue, handleSubmit} = useForm<IForm>({defaultValues: {fName: ""}});
+  const onValid = ({fName}:IForm) => {
+    if(fName !== ''){
       if(
         Object.keys(toDos).some(
-          (v) => v.toLowerCase() === toForm.toLowerCase(),
+          (v) => v.toLowerCase() === fName.toLowerCase(),
         )
-      )
-      return;
-      setToDos({...toDos, [toForm]: []});
-      setValue('toForm', '');
+      ) return;
+      setToDos({...toDos, [fName]: []});
+      setValue("fName", '');
       setCreateFormBtn(false);
     }
   }
+
   const onClick = () => {
-    setFocus('toForm');
-    if(!createFormBtn){
-      setCreateFormBtn(true);
+    if(createFormBtn){
+      setCreateFormBtn(false);
     }
     else{
-      setCreateFormBtn(false);
+      setCreateFormBtn(true);
     }
   }
+
   return (    
     <FormWrap>
-      {createFormBtn ? 
+      { createFormBtn ? 
       <CreateFrom onSubmit={handleSubmit(onValid)}>
-      <input {...register("toForm", {required: true})}
-        type="text"
-        placeholder="보드의 이름을 적어주세요."/>
-        </CreateFrom>:
-        <FormBtn onClick={onClick}>보드판 만들기</FormBtn>}
+        <input {...register("fName", {required: true})}
+          type="text"
+          placeholder="보드의 이름을 적어주세요."
+          autoFocus
+          />
+      </CreateFrom> :
+      <FormBtn onClick={onClick}>보드판 만들기</FormBtn>}
     </FormWrap>
   )
 }

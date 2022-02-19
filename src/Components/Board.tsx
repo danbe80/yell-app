@@ -16,6 +16,8 @@ const Wrapper = styled.div`
   overflow: hidden;
   box-shadow: 0 2px 10px rgba(0,0,0,.2);
   margin-bottom: 5px;
+  border: 1px solid red;
+  box-sizing: border-box;
 `;
 const Title = styled.h2`
   text-align: center;
@@ -32,7 +34,7 @@ const Area = styled.div<IAreaProps>`
     //벗아나 도착한 영역
     props.isDraggingOver ? props.theme.overColor 
     // 벗어나고 난 영역
-    :props.isDraggingFromThis ? props.theme.FromThisColor
+    :props.isDraggingFromThis ? props.theme.FromThisColor 
     // 움직이기 전 보드
     :props.theme.boardColor};
   flex-grow: 1;
@@ -47,15 +49,17 @@ const Form = styled.form`
   }
 `;
 interface IBoardProps {
-  toDos: IToDo[];
+  toForm: string;
   boardId: string;
+  index?: number;
 }
 
 interface IForm{
   toDo: string;
 }
 
-function Board({toDos, boardId}:IBoardProps){
+function Board({toForm, boardId, index}:IBoardProps){
+  console.log(toForm);
   const setToDos = useSetRecoilState(toDoState)
   const {register, setValue, handleSubmit} = useForm<IForm>();
   const onValid = ({toDo}:IForm) => {
@@ -71,6 +75,9 @@ function Board({toDos, boardId}:IBoardProps){
     });
     setValue("toDo", "");
   }
+  const onDragEnd = () => {
+
+  }
   return (
     <Wrapper>
       <Title>{boardId}</Title>
@@ -82,24 +89,40 @@ function Board({toDos, boardId}:IBoardProps){
           />
         </Form>
       <Droppable droppableId={boardId}>
+        {() => (<div></div>)}
         {/* ex 보드판 영역 component*/}
-        {(provided, info) => (
+       {/*  {(provided, info) => (
           <Area 
             isDraggingOver={info.isDraggingOver} 
             isDraggingFromThis={Boolean(info.draggingFromThisWith)} 
             ref={provided.innerRef} {...provided.droppableProps}>
-            {toDos.map((toDo, index) => (
+            {toForm.map((toDo, index) => (
               <DragabbleCard 
               key={toDo.id} 
               toDoId={toDo.id} 
               toDoText={toDo.text} 
               index={index}/>
+              
             ))}
             {provided.placeholder}
           </Area>
-        )}
+        )} */}
       </Droppable>
     </Wrapper>
   );
 }
 export default Board;
+
+
+
+/* 
+              <Draggable draggableId={toDoId + ""} index={index}>
+                {(provided, snapshot) => (
+                <Card ref={provided.innerRef} 
+                isDragging={snapshot.isDragging}
+                {...provided.draggableProps} 
+                {...provided.dragHandleProps}>
+                  {toDoText}
+                </Card>
+                )}
+             </Draggable> */
