@@ -6,6 +6,7 @@ const Time = styled.div`
   font-weight: 400;
   font-size: 14px;
   margin-right: 5px;
+  margin-top: 8px;
 `;
 
 
@@ -33,3 +34,5 @@ function Timer(){
 }
 
 export default Timer;
+
+

@@ -1,3 +1,4 @@
+import React from "react";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
@@ -24,79 +25,107 @@ const Boards = styled.div`
   align-items: flex-start;
   width: 100%;
   gap: 15px;
-  border: 1px solid blue;
-  box-sizing: border-box;
 `;
 
 const Title = styled.h2`
   height: 25px;
+  padding-top: 10px;
   text-align: center;
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 10px;
 `;
 
+
+
+
 function DragDrop(){
   const [toDos, setToDos] = useRecoilState(toDoState);
-  console.log(Object.keys(toDos).map((boardId,index, toForm)=> console.log(boardId , index, toForm[index])));
-
-  const onDragEnd = () => {}
- /*  
+  // form은 무조건 같은 보드판에서 움직임
   const onDragEnd = (info:DropResult) => {
-    const {destination, source, droppableId} = info;
-    console.log(source, destination);
+    const {destination, source, draggableId} = info;
+    console.log(destination)
+    console.log(source)
+    console.log(draggableId)
     if(!destination) return;
-     if(destination.droppableId === source.droppableId){
-      //같은 보드판에서의 움직임
-      setToDos((allBoards) => {
-        const boardCopy = [...allBoards[source.droppableId]];
-        const taskObj = boardCopy[source.index];
-        boardCopy.splice(source.index, 1);
-        boardCopy.splice(destination?.index, 0, taskObj);
-        return {
-          ...allBoards,
-          [source.droppableId]: boardCopy,
-        };
-      });
-  } */
-  /* if(destination.droppableId !== source.droppableId){
-    // 다른 보드판으로의 움직임
-    setToDos((allBoards) => {
-      const sourceBoard = [...allBoards[source.droppableId]];
-      const taskObj = sourceBoard[source.index];
-      const destinationBoard = [...allBoards[destination.droppableId]];
-      sourceBoard.splice(source.index, 1);
-      destinationBoard.splice(destination?.index, 0, taskObj);
-      return {
-        ...allBoards,
-        [source.droppableId]: sourceBoard,
-        [destination.droppableId]: destinationBoard
-      };
-    }); 
-  } */
-// }
+    if(destination.droppableId === source.droppableId){
+      if(destination.index !== source.index){
+        console.log(source.index) // 1
+        console.log(destination.index) // 0
+        setToDos((allCards) => {
+          const cardCopy = [...allCards[source.droppableId]];
+          const cardObj = cardCopy[source.index];
+          console.log(cardCopy)
+          console.log(cardObj)
+          console.log(source.droppableId)
+          console.log(destination.droppableId)
+          cardCopy.splice(source.index, 1);
+          cardCopy.splice(destination.index, 0, cardObj);
+          console.log(cardCopy)
+          console.log(cardObj)
+          console.log(allCards);
+          return {
+            ...allCards,
+            [source.index]: cardCopy
+          }
+        })
+      }
+      else {
+        const allForm = Object.keys(toDos);
+        const allValue = Object.values(toDos);
+        const toFormCopy = [...allForm];
+        const toDosCopy = [...allValue];
+        toFormCopy.splice(source.index, 1);
+        toFormCopy.splice(destination.index, 0 , draggableId);
+        toDosCopy.splice(source.index, 1);
+        toDosCopy.splice(destination.index, 0, allValue[source.index]);
+        const r = toFormCopy.reduce((key, name, idx)=>{
+          return {...key, [name]:toDosCopy[idx]}
+        }, {})
+        setToDos({...r});
+        console.log(toDos)
+      }
+   }
+    if(destination.droppableId !== source.droppableId){
+        setToDos((allCards) => {
+          const sourceCard = [...allCards[source.droppableId]]
+          const cardObj = sourceCard[source.index]
+          const destinationCard = [...allCards[destination.droppableId]];
+          sourceCard.splice(source.index, 1);
+          destinationCard.splice(destination.index, 0, cardObj);
+          return {
+            ...allCards,
+            [source.droppableId]: sourceCard,
+            [destination.droppableId]: destinationCard
+          }
+        })
+    }
+  }
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-       <Droppable droppableId="form" direction="horizontal">
-         {(p)=>(
-           <Boards ref={p.innerRef}>
-             {Object.keys(toDos).map((boardId, index, toForm) => (
-               <Draggable draggableId={boardId} index={index}>
-                 {(p) => (
-                    <Wrapper ref={p.innerRef} {...p.draggableProps}>
-                      <Title {...p.dragHandleProps}>{boardId}</Title>
-                      <Board boardId={boardId} key={index} toForm={toForm[index]} />
-                    </Wrapper>
-                 )}
-               </Draggable>
-             ))}
-             {p.placeholder}
-           </Boards>
-         )}
-
-       </Droppable>
-    </DragDropContext>
+  <DragDropContext onDragEnd={onDragEnd} >
+    <Droppable droppableId="one" direction="horizontal" type="COLUMN">
+      {(p)=>(
+        <Boards ref={p.innerRef}>
+          {Object.keys(toDos).map((boardId, index, toForm) => (
+            <Draggable draggableId={boardId} index={index} key={boardId}>
+              {(p) => (
+                <Wrapper ref={p.innerRef} {...p.draggableProps}>
+                  <Title {...p.dragHandleProps}>{boardId}</Title>
+                  <Board boardId={boardId} key={index} toForm={toForm[index]} />
+                </Wrapper>
+              )}
+            </Draggable>
+          ))}
+          {p.placeholder}
+        </Boards>
+      )}
+    </Droppable>
+  </DragDropContext>
   );
 }
 
-export default DragDrop;
+export default React.memo(DragDrop);
+
+
+
+

@@ -1,3 +1,4 @@
+import { DragDropContext } from "react-beautiful-dnd";
 import styled from "styled-components";
 import CreateBoardForm from "./Components/CreateBoardForm";
 import DragDrop from "./Components/DrageDrop";
@@ -8,13 +9,13 @@ import Timer from "./Components/Timer";
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
   max-width: 2000px;
+  height: 100vh;
   min-height: 650px;
 `;
 
 const BoardsWrap = styled.div`
-  border: 1px solid black;
-  box-sizing: border-box;
 `;
 
 
@@ -35,7 +36,6 @@ interface IHeader {
 
 
 function App() {
-  
   return(
     <Wrapper>
       <Header bgColor="#f1f2f6">
@@ -44,7 +44,7 @@ function App() {
         <Timer />
       </Header>
       <BoardsWrap>
-        <DragDrop />
+         <DragDrop />
       </BoardsWrap>
     </Wrapper>
   );
