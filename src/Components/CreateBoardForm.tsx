@@ -38,6 +38,7 @@ interface IForm{
 function CreateBoardForm(){
   const [createFormBtn, setCreateFormBtn] = useState(false);
   const [toDos, setToDos] = useRecoilState(toDoState);
+  console.log(toDos);
   const {register, setValue, handleSubmit} = useForm<IForm>({defaultValues: {fName: ""}});
   const onValid = ({fName}:IForm) => {
     if(fName !== ''){

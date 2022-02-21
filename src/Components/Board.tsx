@@ -1,5 +1,5 @@
 import React from "react";
-import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
+import { Droppable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
@@ -45,7 +45,7 @@ interface IForm{
   toDo: string;
 }
 
-function Board({toForm, boardId, index}:IBoardProps){
+function Board({toForm, boardId}:IBoardProps){
   const [toDos, setToDos] = useRecoilState(toDoState);
   const {register, setValue, handleSubmit} = useForm<IForm>();
   const onValid = ({toDo}:IForm) => {
@@ -77,7 +77,8 @@ function Board({toForm, boardId, index}:IBoardProps){
             isDraggingOver={snapshot.isDraggingOver} 
             isDraggingFromThis={Boolean(snapshot.draggingFromThisWith)} 
             ref={provided.innerRef} {...provided.droppableProps}>
-            {toDos[toForm].map((toDo, index) => (
+            { toDos[toForm] === [] ? null :
+            toDos[toForm].map((toDo, index) => (
               <DragabbleCard 
               key={toDo.id} 
               toDoId={toDo.id} 

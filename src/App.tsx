@@ -1,4 +1,3 @@
-import { DragDropContext } from "react-beautiful-dnd";
 import styled from "styled-components";
 import CreateBoardForm from "./Components/CreateBoardForm";
 import DragDrop from "./Components/DrageDrop";

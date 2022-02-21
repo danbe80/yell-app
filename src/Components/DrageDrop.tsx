@@ -43,64 +43,63 @@ function DragDrop(){
   const [toDos, setToDos] = useRecoilState(toDoState);
   // form은 무조건 같은 보드판에서 움직임
   const onDragEnd = (info:DropResult) => {
-    const {destination, source, draggableId} = info;
-    console.log(destination)
-    console.log(source)
-    console.log(draggableId)
-    if(!destination) return;
-    if(destination.droppableId === source.droppableId){
-      if(destination.index !== source.index){
-        console.log(source.index) // 1
-        console.log(destination.index) // 0
-        setToDos((allCards) => {
-          const cardCopy = [...allCards[source.droppableId]];
-          const cardObj = cardCopy[source.index];
-          console.log(cardCopy)
-          console.log(cardObj)
-          console.log(source.droppableId)
-          console.log(destination.droppableId)
-          cardCopy.splice(source.index, 1);
-          cardCopy.splice(destination.index, 0, cardObj);
-          console.log(cardCopy)
-          console.log(cardObj)
-          console.log(allCards);
-          return {
-            ...allCards,
-            [source.index]: cardCopy
-          }
-        })
-      }
-      else {
-        const allForm = Object.keys(toDos);
-        const allValue = Object.values(toDos);
-        const toFormCopy = [...allForm];
-        const toDosCopy = [...allValue];
-        toFormCopy.splice(source.index, 1);
-        toFormCopy.splice(destination.index, 0 , draggableId);
-        toDosCopy.splice(source.index, 1);
-        toDosCopy.splice(destination.index, 0, allValue[source.index]);
-        const r = toFormCopy.reduce((key, name, idx)=>{
-          return {...key, [name]:toDosCopy[idx]}
-        }, {})
-        setToDos({...r});
-        console.log(toDos)
-      }
-   }
+    const {destination, source} = info;
+    if (!destination) return;
     if(destination.droppableId !== source.droppableId){
-        setToDos((allCards) => {
-          const sourceCard = [...allCards[source.droppableId]]
-          const cardObj = sourceCard[source.index]
-          const destinationCard = [...allCards[destination.droppableId]];
-          sourceCard.splice(source.index, 1);
-          destinationCard.splice(destination.index, 0, cardObj);
+      // 다른 폼으로 이동 시
+      if(destination.index !== source.index){
+        return setToDos((allCards)=>{
+          // 카드가 다른 폼의 다른 자리로 이동
+          const sourceCardCopy = [...allCards[source.droppableId]];
+          const destinationCardCopy = [...allCards[destination.droppableId]];
+          const cardObj = sourceCardCopy[source.index];
+          sourceCardCopy.splice(source.index, 1);
+          destinationCardCopy.splice(destination.index, 0, cardObj);
           return {
             ...allCards,
-            [source.droppableId]: sourceCard,
-            [destination.droppableId]: destinationCard
+            [source.droppableId]: sourceCardCopy,
+            [destination.droppableId]: destinationCardCopy
           }
-        })
+        });
+      }
+      return setToDos((allCards) => {
+        // 카드가 다른 폼의 같은 자리로 이동
+        const sourceCard = [...allCards[source.droppableId]]
+        const cardObj = sourceCard[source.index]
+        const destinationCard = [...allCards[destination.droppableId]];
+        sourceCard.splice(source.index, 1);
+        destinationCard.splice(destination.index, 0, cardObj);
+        return {
+          ...allCards,
+          [source.droppableId]: sourceCard,
+          [destination.droppableId]: destinationCard
+        }
+      })
     }
-  }
+    if(destination.droppableId === source.droppableId && destination.index !== source.index){
+      if (destination.droppableId === "one" && source.droppableId === "one"){
+        // 폼 전체가 다른 자리로 이동
+        // 버벅이는 부분이 있지만,, 성공해서 행복해..이틀 걸렸다...
+          const allEntries = Object.entries(toDos);
+          const addForm = allEntries[source.index];
+          allEntries.splice(source.index, 1);
+          allEntries.splice(destination.index, 0, addForm);
+          const change = Object.fromEntries(allEntries);
+        return setToDos(change);
+      }
+      return setToDos((allCards) => {
+        // 같은 폼에서 자리만 이동
+        const cardCopy = [...allCards[source.droppableId]];
+        const cardObj = cardCopy[source.index];
+        cardCopy.splice(source.index, 1);
+        cardCopy.splice(destination.index, 0, cardObj);
+        return {
+          ...allCards,
+          [source.droppableId]: cardCopy,
+        }
+      })
+    }
+}
   return (
   <DragDropContext onDragEnd={onDragEnd} >
     <Droppable droppableId="one" direction="horizontal" type="COLUMN">
@@ -125,7 +124,3 @@ function DragDrop(){
 }
 
 export default React.memo(DragDrop);
-
-
-
-
