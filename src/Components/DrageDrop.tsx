@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { toDoState } from "../atoms";
+import { toDoState } from "../Atoms/atoms";
+import { saveToDos } from "../Atoms/localstorage";
 import Board from "./Board";
 
 const Wrapper = styled.div`
@@ -43,7 +44,7 @@ function DragDrop(){
   const [toDos, setToDos] = useRecoilState(toDoState);
   // form은 무조건 같은 보드판에서 움직임
   const onDragEnd = (info:DropResult) => {
-    const {destination, source} = info;
+    const {destination, source, type} = info;
     if (!destination) return;
     if(destination.droppableId !== source.droppableId){
       // 다른 폼으로 이동 시
@@ -77,15 +78,17 @@ function DragDrop(){
       })
     }
     if(destination.droppableId === source.droppableId && destination.index !== source.index){
-      if (destination.droppableId === "one" && source.droppableId === "one"){
+      if (type==="COLUMN"){
         // 폼 전체가 다른 자리로 이동
         // 버벅이는 부분이 있지만,, 성공해서 행복해..이틀 걸렸다...
-          const allEntries = Object.entries(toDos);
-          const addForm = allEntries[source.index];
-          allEntries.splice(source.index, 1);
+        // 숫자는 순서 변경이 안되는 오류가 있음...
+        return setToDos((allBoards) => {
+          const allEntries = Object.entries(allBoards);
+          const [addForm] = allEntries.splice(source.index, 1)
           allEntries.splice(destination.index, 0, addForm);
-          const change = Object.fromEntries(allEntries);
-        return setToDos(change);
+          const r = Object.fromEntries(allEntries);
+          return r;
+        });
       }
       return setToDos((allCards) => {
         // 같은 폼에서 자리만 이동
@@ -99,14 +102,18 @@ function DragDrop(){
         }
       })
     }
-}
+  }
+
+  useEffect(() => {
+    saveToDos(toDos);
+  }, [toDos]);
   return (
   <DragDropContext onDragEnd={onDragEnd} >
     <Droppable droppableId="one" direction="horizontal" type="COLUMN">
       {(p)=>(
         <Boards ref={p.innerRef}>
           {Object.keys(toDos).map((boardId, index, toForm) => (
-            <Draggable draggableId={boardId} index={index} key={boardId}>
+            <Draggable draggableId={boardId+""} index={index} key={boardId}>
               {(p) => (
                 <Wrapper ref={p.innerRef} {...p.draggableProps}>
                   <Title {...p.dragHandleProps}>{boardId}</Title>

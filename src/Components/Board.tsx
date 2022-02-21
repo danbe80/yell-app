@@ -3,7 +3,7 @@ import { Droppable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { toDoState } from "../atoms";
+import { toDoState } from "../Atoms/atoms";
 import DragabbleCard from "./DragabbleCard";
 
 const Wrapper = styled.div`
@@ -53,10 +53,10 @@ function Board({toForm, boardId}:IBoardProps){
       id: Date.now(),
       text: toDo,
     };
-    setToDos((allBoards) => {
+    setToDos((allCards) => {
       return{
-        ...allBoards,
-        [boardId]: [newToDo, ...allBoards[boardId]]
+        ...allCards,
+        [boardId]: [newToDo, ...allCards[boardId]]
       };
     });
     setValue("toDo", "");
