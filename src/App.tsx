@@ -27,6 +27,7 @@ const Header = styled.header<IHeader>`
   background-color: ${props => props.bgColor};
   box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
   margin-bottom: 20px;
+  text-align: center;
 `
 
 interface IHeader {

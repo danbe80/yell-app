@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 const Time = styled.div`
   height: 100%;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 16px;
   margin-right: 5px;
   margin-top: 8px;
 `;

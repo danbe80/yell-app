@@ -15,3 +15,6 @@ export const toDoState = atom<IToDoState>({
   default: loadToDos() ?? {}
   });
 
+export interface IDelete {
+  deleteBtn: boolean;
+}

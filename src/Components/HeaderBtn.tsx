@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 
 const BtnWrap = styled.div`
@@ -10,38 +11,36 @@ const BtnWrap = styled.div`
     margin: 2px;
   }
 `;
-const DelBtn = styled.button`
-  background-color: red;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  border: none;
-  &:hover {
-    box-shadow: 2px 1px 5px rgba(0,0,0,.5) inset;
-  }
-`
 const ChangeTheme = styled.button`
-  background-color: green;
-  width: 15px;
-  height: 15px;
+  background-color: ${props => props.theme.boardColor};
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  border: none;
+  border: 1px solid rgba(194, 194, 194, 0.498);
+  box-sizing: border-box;
   &:hover {
-    box-shadow: 2px 1px 5px rgba(0,0,0,.5) inset;
+    box-shadow: 1px 1px 4px rgba(0,0,0,.3) inset;
   }
 `;
 
 function HeaderBtn(){
-  const onDelete = () => {
-    // 폼 삭제할 수 있는 부분
-  }
+  const [changeColor, setChangeColor] = useState(false);
+
   const onChangeColor = () => {
     // theme color 변경
+    if(changeColor){
+      console.log("색 picker on");
+      setChangeColor(false);
+    }
+    else {
+      console.log("색 picker off");
+      setChangeColor(true);
+    }
   }
   return (
     <BtnWrap>
-      <DelBtn onClick={onDelete}/>
       <ChangeTheme onClick={onChangeColor}/>
+      {}
     </BtnWrap>
   );
 }

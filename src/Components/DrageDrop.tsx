@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { ButtonHTMLAttributes, ReactHTML, ReactHTMLElement, useEffect } from "react";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
+import { idText } from "typescript";
 import { toDoState } from "../Atoms/atoms";
 import { saveToDos } from "../Atoms/localstorage";
 import Board from "./Board";
@@ -29,19 +30,30 @@ const Boards = styled.div`
 `;
 
 const Title = styled.h2`
-  height: 25px;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  display: block;
   padding-top: 10px;
   text-align: center;
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 10px;
-`;
+  position: relative;
+  `;
+const DeleteBtn = styled.span`
+  position: absolute;
+  right: 0;
+  display: inline-block;
+  cursor: pointer;
+`
 
 
 
 
 function DragDrop(){
   const [toDos, setToDos] = useRecoilState(toDoState);
+  // const delForm = useRecoilValue()
   // form은 무조건 같은 보드판에서 움직임
   const onDragEnd = (info:DropResult) => {
     const {destination, source, type} = info;
@@ -103,6 +115,14 @@ function DragDrop(){
       })
     }
   }
+  const onDeleteForm = (id : string) => {
+    setToDos((allBoards) => {
+      const copyForm = Object.entries(allBoards);
+      const newForm = copyForm.filter((v)=>( v[0] !== id));
+      const newFormObj = Object.fromEntries(newForm);
+      return {...newFormObj};
+    })
+  }
 
   useEffect(() => {
     saveToDos(toDos);
@@ -110,19 +130,22 @@ function DragDrop(){
   return (
   <DragDropContext onDragEnd={onDragEnd} >
     <Droppable droppableId="one" direction="horizontal" type="COLUMN">
-      {(p)=>(
-        <Boards ref={p.innerRef}>
+      {(provided)=>(
+        <Boards ref={provided.innerRef}>
           {Object.keys(toDos).map((boardId, index, toForm) => (
             <Draggable draggableId={boardId+""} index={index} key={boardId}>
-              {(p) => (
-                <Wrapper ref={p.innerRef} {...p.draggableProps}>
-                  <Title {...p.dragHandleProps}>{boardId}</Title>
+              {(provided) => (
+                <Wrapper ref={provided.innerRef} {...provided.draggableProps}>
+                  <Title {...provided.dragHandleProps}>
+                    {boardId}
+                    <DeleteBtn onClick={() => {onDeleteForm(provided.draggableProps["data-rbd-draggable-id"])}}>❌</DeleteBtn>
+                  </Title>
                   <Board boardId={boardId} key={index} toForm={toForm[index]} />
                 </Wrapper>
               )}
             </Draggable>
           ))}
-          {p.placeholder}
+          {provided.placeholder}
         </Boards>
       )}
     </Droppable>
