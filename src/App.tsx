@@ -3,7 +3,29 @@ import CreateBoardForm from "./Components/CreateBoardForm";
 import DragDrop from "./Components/DrageDrop";
 import HeaderBtn from "./Components/HeaderBtn";
 import Timer from "./Components/Timer";
+import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import reset from 'styled-reset';
+import {  redTheme, yellowTheme, greenTheme, blueTheme, purpleTheme, silverTheme, blackTheme} from "./theme";
+import { useState } from "react";
+import { useRecoilValue } from "recoil";
+import { colorState } from "./Atoms/color";
 
+const GlobalStyle = createGlobalStyle`
+  ${reset}
+  // 추가 초기 css
+  @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
+  body {
+    font-weight: 300;
+    font-family: 'Source Sans Pro', sans-serif;
+    background-color:${(props) => props.theme.bgColor};
+    color: #111;
+    line-height: 1.2;
+  }
+  a {
+    text-decoration:none;
+    color:inherit;
+  }
+  `;
 
 const Wrapper = styled.div`
   display: flex;
@@ -36,17 +58,30 @@ interface IHeader {
 
 
 function App() {
+  const colorpick = useRecoilValue(colorState);
+
   return(
-    <Wrapper>
-      <Header bgColor="#f1f2f6">
-        <HeaderBtn />
-        <CreateBoardForm />
-        <Timer />
-      </Header>
-      <BoardsWrap>
-         <DragDrop />
-      </BoardsWrap>
-    </Wrapper>
+    <>
+      <ThemeProvider 
+        theme={colorpick === "yellowTheme" ? yellowTheme :
+          colorpick === "redTheme" ? redTheme : 
+          colorpick === "greenTheme" ? greenTheme :
+          colorpick === "blueTheme" ? blueTheme :
+          colorpick === "purpleTheme" ? purpleTheme : 
+          colorpick === "silverTheme" ? silverTheme : blackTheme}>
+        <GlobalStyle />
+        <Wrapper>
+          <Header bgColor="#f1f2f6">
+            <HeaderBtn />
+            <CreateBoardForm />
+            <Timer />
+          </Header>
+          <BoardsWrap>
+            <DragDrop />
+          </BoardsWrap>
+        </Wrapper>
+      </ThemeProvider>
+    </>
   );
 }
 

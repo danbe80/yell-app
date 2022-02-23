@@ -9,5 +9,6 @@ declare module 'styled-components' {
     overColor: string;
     FromThisColor: string;
 		draggingCardColor: string,
+		textColor?: string,
 	}
 }

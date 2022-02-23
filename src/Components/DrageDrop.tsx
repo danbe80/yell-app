@@ -36,6 +36,7 @@ const Title = styled.h2`
   display: block;
   padding-top: 10px;
   text-align: center;
+  color: ${(props) => props.theme.textColor};
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 10px;
