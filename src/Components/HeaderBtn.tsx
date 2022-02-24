@@ -61,7 +61,7 @@ interface IColor{
 function HeaderBtn(){
   const [colorPicker, setColorPricker] = useState(false);
   const [colors, setColor] = useRecoilState(colorState);
-  console.log(colors);
+  
   const onClick = (data:any) => {
     setColor(data.target.id)
     setColorPricker(false)

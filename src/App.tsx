@@ -58,9 +58,6 @@ interface IHeader {
 
 function App() {
   const colors = useRecoilValue(colorState);
-  console.log(colors)
-  console.log(typeof colors)
-  console.log(typeof "yellowTheme")
 
   return(
     <>
