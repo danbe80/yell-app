@@ -15,8 +15,8 @@ function Timer(){
   // 시간 만드는 function
   const checkTime = () => {
     const currentTime = new Date();
-    let hours = currentTime.getHours() < 9 ? String(currentTime.getHours()).padStart(2, "0") : currentTime.getHours();
-    let minutes = currentTime.getMinutes() < 9 ? String(currentTime.getMinutes()).padStart(2, "0") : currentTime.getMinutes();
+    let hours = currentTime.getHours() <= 9 ? String(currentTime.getHours()).padStart(2, "0") : currentTime.getHours();
+    let minutes = currentTime.getMinutes() <= 9 ? String(currentTime.getMinutes()).padStart(2, "0") : currentTime.getMinutes();
     let times = `${hours} : ${minutes} `;
     setTime(times);
   }
