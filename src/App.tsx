@@ -8,6 +8,7 @@ import reset from 'styled-reset';
 import {  redTheme, yellowTheme, greenTheme, blueTheme, purpleTheme, silverTheme, blackTheme} from "./theme";
 import { useRecoilValue } from "recoil";
 import { colorState } from "./Atoms/color";
+import { Helmet } from "react-helmet";
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
@@ -30,7 +31,6 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 2000px;
   height: 100vh;
   min-height: 650px;
 `;
@@ -70,6 +70,9 @@ function App() {
         colors === "silverTheme" ? silverTheme : blackTheme}>
         <GlobalStyle />
         <Wrapper>
+          <Helmet>
+            <title>Yell</title>
+          </Helmet>
           <Header bgColor="#f1f2f6">
             <HeaderBtn />
             <CreateBoardForm />

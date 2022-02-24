@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { colorState, ITheme } from "../Atoms/color";
+import { colorState } from "../Atoms/color";
 import { saveTheme } from "../Atoms/localstorage";
 
 const BtnWrap = styled.div`
@@ -55,13 +54,10 @@ const Colors = styled.button<IColorProps>`
     box-shadow: 1px 1px 4px rgba(0,0,0,.3) inset;
   }
 `
-interface IColor{
-  colors: string;
-}
 function HeaderBtn(){
   const [colorPicker, setColorPricker] = useState(false);
   const [colors, setColor] = useRecoilState(colorState);
-  
+
   const onClick = (data:any) => {
     setColor(data.target.id)
     setColorPricker(false)
