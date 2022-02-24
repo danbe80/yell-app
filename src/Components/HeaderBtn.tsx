@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { colorState } from "../Atoms/color";
+import { colorState, ITheme } from "../Atoms/color";
+import { saveTheme } from "../Atoms/localstorage";
 
 const BtnWrap = styled.div`
   height: 25px;
@@ -55,12 +56,16 @@ const Colors = styled.button<IColorProps>`
   }
 `
 interface IColor{
-  color: string;
+  colors: string;
 }
 function HeaderBtn(){
   const [colorPicker, setColorPricker] = useState(false);
   const [colors, setColor] = useRecoilState(colorState);
-
+  console.log(colors);
+  const onClick = (data:any) => {
+    setColor(data.target.id)
+    setColorPricker(false)
+  }
   const onColorPicker = () => {
     // theme color picker on/off
     if(colorPicker){
@@ -70,18 +75,21 @@ function HeaderBtn(){
       setColorPricker(true);
     }
   }
+  useEffect(() => {
+    saveTheme(colors);
+  }, [colors])
   return (
     <BtnWrap>
       <ChangeTheme onClick={onColorPicker}/>
       {colorPicker ? 
         <ColorPicker>
-          <Colors onClick={() => {setColor("redTheme"); setColorPricker(false);}} type="button" Color="#e74c3c" top="5px"/>
-          <Colors onClick={() => {setColor("yellowTheme"); setColorPricker(false);}} type="button" Color="#f6b93b" top="27px"/>
-          <Colors onClick={() => {setColor("greenTheme"); setColorPricker(false);}} type="button" Color="#16a085" top="49px"/>
-          <Colors onClick={() => {setColor("blueTheme" ); setColorPricker(false);}} type="button" Color="#0c2461" top="71px"/>
-          <Colors onClick={() => {setColor("purpleTheme"); setColorPricker(false);}} type="button" Color="#574b90" top="93px"/>
-          <Colors onClick={() => {setColor("silverTheme"); setColorPricker(false);}} type="button" Color="#f1f1f1" top="115px"/>
-          <Colors onClick={() => {setColor("blackTheme"); setColorPricker(false);}} type="button" Color="#111111" top="137px"/>
+          <Colors onClick={onClick} id="redTheme" type="button" Color="#e74c3c" top="5px"/>
+          <Colors onClick={onClick} id="yellowTheme" type="button" Color="#f6b93b" top="27px"/>
+          <Colors onClick={onClick} id="greenTheme" type="button" Color="#16a085" top="49px"/>
+          <Colors onClick={onClick} id="blueTheme" type="button" Color="#0c2461" top="71px"/>
+          <Colors onClick={onClick} id="purpleTheme" type="button" Color="#574b90" top="93px"/>
+          <Colors onClick={onClick} id="silverTheme" type="button" Color="#dfe6e9" top="115px"/>
+          <Colors onClick={onClick} id="blackTheme" type="button" Color="#1e272e" top="137px"/>
         </ColorPicker> 
         : null}
     </BtnWrap>

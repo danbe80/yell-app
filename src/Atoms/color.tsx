@@ -1,4 +1,5 @@
 import { atom } from "recoil";
+import { loadTheme } from "./localstorage";
 
 export interface ITheme{
   color: string;
@@ -6,5 +7,5 @@ export interface ITheme{
 
 export const colorState = atom({
   key: "colors",
-  default: "yellowTheme"
+  default: loadTheme(),
 })

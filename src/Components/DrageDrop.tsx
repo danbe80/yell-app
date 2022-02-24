@@ -42,6 +42,7 @@ const Title = styled.h2`
   margin-bottom: 10px;
   position: relative;
   `;
+  
 const DeleteBtn = styled.span`
   position: absolute;
   right: 0;

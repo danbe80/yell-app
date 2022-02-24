@@ -6,7 +6,6 @@ import Timer from "./Components/Timer";
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import reset from 'styled-reset';
 import {  redTheme, yellowTheme, greenTheme, blueTheme, purpleTheme, silverTheme, blackTheme} from "./theme";
-import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { colorState } from "./Atoms/color";
 
@@ -58,17 +57,20 @@ interface IHeader {
 
 
 function App() {
-  const colorpick = useRecoilValue(colorState);
+  const colors = useRecoilValue(colorState);
+  console.log(colors)
+  console.log(typeof colors)
+  console.log(typeof "yellowTheme")
 
   return(
     <>
       <ThemeProvider 
-        theme={colorpick === "yellowTheme" ? yellowTheme :
-          colorpick === "redTheme" ? redTheme : 
-          colorpick === "greenTheme" ? greenTheme :
-          colorpick === "blueTheme" ? blueTheme :
-          colorpick === "purpleTheme" ? purpleTheme : 
-          colorpick === "silverTheme" ? silverTheme : blackTheme}>
+        theme={colors === "yellowTheme" ? yellowTheme :
+        colors === "redTheme" ? redTheme : 
+        colors === "greenTheme" ? greenTheme :
+        colors === "blueTheme" ? blueTheme :
+        colors === "purpleTheme" ? purpleTheme : 
+        colors === "silverTheme" ? silverTheme : blackTheme}>
         <GlobalStyle />
         <Wrapper>
           <Header bgColor="#f1f2f6">
