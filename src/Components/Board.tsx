@@ -1,3 +1,11 @@
+/* 
+  기능 : 보드판 생성
+  작성자: Lee Hye Rin (danbe80)
+  git address: https://github.com/danbe80/yell-app
+
+  2022.3.9 : 수정 작업
+*/
+
 import React from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
@@ -17,21 +25,23 @@ interface IAreaProps {
 }
 const Area = styled.div<IAreaProps>`
   min-height: 220px;
-  background-color: ${(props) => 
+  background-color: ${(props) =>
     //벗아나 도착한 영역
-    props.isDraggingOver ? props.theme.overColor 
-    // 벗어나고 난 영역
-    :props.isDraggingFromThis ? props.theme.FromThisColor 
-    // 움직이기 전 보드
-    :props.theme.boardColor};
+    props.isDraggingOver
+      ? props.theme.overColor
+      : // 벗어나고 난 영역
+      props.isDraggingFromThis
+      ? props.theme.FromThisColor
+      : // 움직이기 전 보드
+        props.theme.boardColor};
   flex-grow: 1;
-  transition: background-color .3s ease-in-out;
+  transition: background-color 0.3s ease-in-out;
   padding: 20px;
 `;
 
 const Form = styled.form`
   width: 100%;
-  input{
+  input {
     width: 100%;
   }
 `;
@@ -41,50 +51,54 @@ interface IBoardProps {
   index?: number;
 }
 
-interface IForm{
+interface IForm {
   toDo: string;
 }
 
-function Board({toForm, boardId}:IBoardProps){
+function Board({ toForm, boardId }: IBoardProps) {
   const [toDos, setToDos] = useRecoilState(toDoState);
-  const {register, setValue, handleSubmit} = useForm<IForm>();
-  const onValid = ({toDo}:IForm) => {
+  const { register, setValue, handleSubmit } = useForm<IForm>();
+  const onValid = ({ toDo }: IForm) => {
     const newToDo = {
       id: Date.now(),
       text: toDo,
     };
     setToDos((allCards) => {
-      return{
+      return {
         ...allCards,
-        [boardId]: [newToDo, ...allCards[boardId]]
+        [boardId]: [newToDo, ...allCards[boardId]],
       };
     });
     setValue("toDo", "");
-  }
+  };
   return (
     <Wrapper>
       <Form onSubmit={handleSubmit(onValid)}>
-        <input 
-          {...register("toDo", {required: true})}
+        <input
+          {...register("toDo", { required: true })}
           type="text"
           placeholder={`Add task on ${boardId}`}
         />
       </Form>
       <Droppable droppableId={boardId}>
         {/* ex 보드판 영역 component*/}
-          {(provided, snapshot) => (
-          <Area 
-            isDraggingOver={snapshot.isDraggingOver} 
-            isDraggingFromThis={Boolean(snapshot.draggingFromThisWith)} 
-            ref={provided.innerRef} {...provided.droppableProps}>
-            { toDos[toForm] === [] ? null :
-            toDos[toForm].map((toDo, index) => (
-              <DragabbleCard 
-              key={toDo.id} 
-              toDoId={toDo.id} 
-              toDoText={toDo.text} 
-              index={index}/>
-            ))}
+        {(provided, snapshot) => (
+          <Area
+            isDraggingOver={snapshot.isDraggingOver}
+            isDraggingFromThis={Boolean(snapshot.draggingFromThisWith)}
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+            {toDos[toForm] === []
+              ? null
+              : toDos[toForm].map((toDo, index) => (
+                  <DragabbleCard
+                    key={toDo.id}
+                    toDoId={toDo.id}
+                    toDoText={toDo.text}
+                    index={index}
+                  />
+                ))}
             {provided.placeholder}
           </Area>
         )}
