@@ -70,3 +70,5 @@ export const blackTheme: DefaultTheme = {
   FromThisColor: "#c8d6e5",
   draggingCardColor: "#d2dae2"
 };
+
+// theme별 색상

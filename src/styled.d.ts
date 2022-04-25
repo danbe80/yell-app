@@ -12,3 +12,5 @@ declare module 'styled-components' {
 		textColor?: string,
 	}
 }
+
+// Theme style interface 

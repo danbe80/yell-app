@@ -4,8 +4,18 @@
   git address: https://github.com/danbe80/yell-app
 
   2022.3.9 : 수정 작업
-*/
 
+  2022.4.23 : code review
+
+  함수형 프로그래밍 짠 이유?
+  가장 익숙한 프로그래밍 구조여서?
+*/
+/* 
+  useEffect : 컴포넌트가 렌더링 될 때마다 특정 작업을 실행할 수 있도록 하는 Hook
+  DragDropContext : Drag & Drop을 활성화하려는 응용 프로그램 부분을 래핑하는 태그
+  Droppable : 드롭될 수 있는 영역
+  Draggable : 끌 수 있는 것
+*/
 import React, { useEffect } from "react";
 import {
   DragDropContext,
@@ -15,6 +25,7 @@ import {
 } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
+// 상태관리
 import { toDoState } from "../Atoms/atoms";
 import { saveToDos } from "../Atoms/localstorage";
 import Board from "./Board";
@@ -69,10 +80,37 @@ function DragDrop() {
   // Drag가 끝나고 난 뒤 이벤트
   const onDragEnd = (info: DropResult) => {
     const { destination, source, type } = info;
+    // 옮겨진 위치(Drag) : destination
+    // 선택한 카드 위치(Drop) : source
 
+    console.log(source);
+    console.log(destination);
+    console.log(toDos);
+
+    // 움직임이 없는 경우 (destination이 undefined일 경우)
     // 위치를 바꾸지 않거나 움직이지 않음
     if (!destination) return;
 
+    // 움직임이 있는 경우
+    // 보드의 움직임일 경우
+    // 2022. 04.25 update
+    if (source.droppableId === "board") {
+      // index가 변경될 경우 (보드의 위치가 변경되었다.)
+      if (destination.index !== source.index) {
+        return setToDos((allBoards) => {
+          //Object.entries() : 객체 => 배열
+          const allEntries = Object.entries(allBoards);
+          // 선택한 보드를 복사
+          const [sourceBoardCopy] = allEntries.splice(source.index, 1);
+          allEntries.splice(destination.index, 0, sourceBoardCopy);
+          allBoards = Object.fromEntries(allEntries);
+          return { ...allBoards };
+        });
+        // return console.log("보드판의 위치가 변경되었다");
+      }
+      // index가 같은 경우 (보드의 위치가 변경되지 않았다.)
+      console.log("보드판의 위치가 변경되지 않았다.");
+    }
     // 다른 폼으로 이동 시
     if (destination.droppableId !== source.droppableId) {
       // 카드가 다른 폼의 다른 자리로 이동
@@ -147,13 +185,14 @@ function DragDrop() {
   useEffect(() => {
     saveToDos(toDos);
   }, [toDos]);
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="one" direction="horizontal" type="COLUMN">
+      <Droppable droppableId="board" direction="horizontal" type="COLUMN">
         {(provided) => (
           <Boards ref={provided.innerRef}>
             {Object.keys(toDos).map((boardId, index, toForm) => (
-              <Draggable draggableId={boardId + ""} index={index} key={boardId}>
+              <Draggable draggableId={boardId} index={index} key={boardId}>
                 {(provided) => (
                   <Wrapper ref={provided.innerRef} {...provided.draggableProps}>
                     <Title {...provided.dragHandleProps}>

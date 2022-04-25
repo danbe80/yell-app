@@ -210,9 +210,9 @@ const onValid = ({ toDo }: IForm) => {
 
 - drag and drop을 쉽게 구성할 수 있도록 해주는 라이브러리
 
-- <DragDropContext /> : 끌어서 놓기를 활성화하려는 응용 프로그램 부분을 래핑
-- <Droppable /> : 드롭될 수 있는 영역.
-- <Draggable /> : 끌 수 있는 것
+- `<DragDropContext />` : 끌어서 놓기를 활성화하려는 응용 프로그램 부분을 래핑
+- `<Droppable />` : 드롭될 수 있는 영역.
+- `<Draggable />` : 끌 수 있는 것
 
 ```js
 <DragDropContext onDragEnd={onDragEnd}>
@@ -269,6 +269,16 @@ const onValid = ({ toDo }: IForm) => {
 
 - react를 위한 상태관리 라이브러리
 
+- react에서 지원하는 전용 상태관리 => 손쉽게 지원 가능
+
+- 러닝커브가 상당히 적고, hook을 사용하는 방식이 익숙한 react 개발자들에게 훨씬 편하게 사용이 가능하다.
+
+- 러닝 커브란? 직역하면 학습 곡선을 의미
+
+- 적은 코드양의 보일러 플레이트가 가능하다.
+
+- 보일러 플레이트란? 컴퓨터 프로그래밍에서 보일러 플레이트 또는 보일러 플레이트 코드라고 부르는 것은 최소한의 변경으로 여러 곳에서 재사용되며 반복적으로 비슷한 형태를 띄는 코드
+
 - recoil 상태를 사용하는 컴포넌트는 부모 트리 어딘가에 나타나는 RecoilRoot가 필요.
 
   ### Atom
@@ -276,3 +286,11 @@ const onValid = ({ toDo }: IForm) => {
   - 상태(State)의 일부를 나타낸다. 어떤 컴포넌트에서나 읽고 쓸 수 있음.
 
   - atom의 값을 읽는 컴포넌트들은 암묵적으로 atom을 구독함. atom에 어떤 변화가 있으면, atom을 구독하는 모든 컴포넌트들이 재 렌더링 되는 결과가 발생
+
+## React.memo()
+
+- 컴포넌트를 렌더링 하고 결과를 Memoizing 함
+
+- 다음 렌더링이 일어날 때 props가 같다면 Memoizing된 내용을 재사용함.
+
+- memo()를 사용한 이유는 Drag&Drop 되지 않는 메모들은 리랜더링 되는 것을 방지하기 위해서
