@@ -157,67 +157,6 @@ function DragDrop() {
         });
       }
     }
-
-    // 다른 폼으로 이동 시
-    // if (destination.droppableId !== source.droppableId) {
-    //   // 카드가 다른 폼의 다른 자리로 이동
-    //   if (destination.index !== source.index) {
-    //     return setToDos((allCards) => {
-    //       const sourceCardCopy = [...allCards[source.droppableId]];
-    //       const destinationCardCopy = [...allCards[destination.droppableId]];
-    //       const cardObj = sourceCardCopy[source.index];
-    //       sourceCardCopy.splice(source.index, 1);
-    //       destinationCardCopy.splice(destination.index, 0, cardObj);
-    //       return {
-    //         ...allCards,
-    //         [source.droppableId]: sourceCardCopy,
-    //         [destination.droppableId]: destinationCardCopy,
-    //       };
-    //     });
-    //   }
-    //   // 카드가 다른 폼의 같은 자리로 이동
-    //   return setToDos((allCards) => {
-    //     const sourceCard = [...allCards[source.droppableId]];
-    //     const cardObj = sourceCard[source.index];
-    //     const destinationCard = [...allCards[destination.droppableId]];
-    //     sourceCard.splice(source.index, 1);
-    //     destinationCard.splice(destination.index, 0, cardObj);
-    //     return {
-    //       ...allCards,
-    //       [source.droppableId]: sourceCard,
-    //       [destination.droppableId]: destinationCard,
-    //     };
-    //   });
-    // }
-
-    // if (
-    //   destination.droppableId === source.droppableId &&
-    //   destination.index !== source.index
-    // ) {
-    //   if (type === "COLUMN") {
-    //     // 보드 전체가 다른 자리로 이동
-    //     // 버벅이는 부분이 있지만,, 성공해서 행복해..이틀 걸렸다...
-    //     // 숫자는 순서 변경이 안되는 오류가 있음...
-    //     return setToDos((allBoards) => {
-    //       const allEntries = Object.entries(allBoards);
-    //       const [addForm] = allEntries.splice(source.index, 1);
-    //       allEntries.splice(destination.index, 0, addForm);
-    //       const r = Object.fromEntries(allEntries);
-    //       return r;
-    //     });
-    //   }
-    //   return setToDos((allCards) => {
-    //     // 같은 보드에서 카드 자리만 이동
-    //     const cardCopy = [...allCards[source.droppableId]];
-    //     const cardObj = cardCopy[source.index];
-    //     cardCopy.splice(source.index, 1);
-    //     cardCopy.splice(destination.index, 0, cardObj);
-    //     return {
-    //       ...allCards,
-    //       [source.droppableId]: cardCopy,
-    //     };
-    //   });
-    // }
   };
   // 보드 삭제하기
   const onDeleteForm = (id: string) => {
